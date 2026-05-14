@@ -39,6 +39,8 @@ flutter run
 
 **.env / Info.plist 변경 불필요** — mock 영상 모두 HTTPS.
 
+## 데모
+https://github.com/user-attachments/assets/d89a8a9d-3ffc-4ef6-a078-2d95ca35bafa
 ---
 
 ## 1.5 Performance (실측 결과)
