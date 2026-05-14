@@ -51,6 +51,8 @@ dependencies:
   # 디스크 LRU 캐싱 (~80KB) — 1바퀴 후 file:// 재생
   flutter_cache_manager: ^3.4.1
 
+  lottie: ^3.3.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -72,6 +74,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/thumbnails/
+    - assets/lottie/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

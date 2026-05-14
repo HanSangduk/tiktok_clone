@@ -6,6 +6,7 @@ import '../../models/video_post.dart';
 import 'feed_view_model.dart';
 import 'widgets/feed_overlay.dart';
 import 'widgets/like_animation.dart';
+import 'widgets/play_pause_indicator.dart';
 
 /// 영상 1개 페이지.
 /// - 부모(FeedScreen)에서 [controller]를 prop으로 받음 (자체 init/dispose X).
@@ -31,22 +32,29 @@ class _VideoPageState extends ConsumerState<VideoPage>
     with SingleTickerProviderStateMixin {
   late final AnimationController _likeAnim = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 700),
+    duration: const Duration(milliseconds: 1200),
   );
+
+  /// 사용자가 명시적 탭으로 pause한 경우만 true. 자동재생/swipe에 의한
+  /// isPlaying=false 구간은 false 유지 → PlayPauseIndicator 깜빡임 방지.
+  final ValueNotifier<bool> _userPaused = ValueNotifier(false);
 
   @override
   void dispose() {
     _likeAnim.dispose();
+    _userPaused.dispose();
     super.dispose();
   }
 
   void _onTap() {
-    final c = widget.slot.value; // ← widget.controller → widget.slot.value
+    final c = widget.slot.value;
     if (c == null || !c.value.isInitialized) return;
     if (c.value.isPlaying) {
       c.pause();
+      _userPaused.value = true;
     } else {
       c.play();
+      _userPaused.value = false;
     }
   }
 
@@ -104,6 +112,19 @@ class _VideoPageState extends ConsumerState<VideoPage>
           RepaintBoundary(child: FeedOverlay(post: widget.post)),
           // 4) 더블탭 하트
           RepaintBoundary(child: LikeAnimation(animation: _likeAnim)),
+          // 5) Pause 상태 indicator (사용자 명시 탭으로 pause한 경우만)
+          RepaintBoundary(
+            child: ValueListenableBuilder<VideoPlayerController?>(
+              valueListenable: widget.slot,
+              builder: (_, c, __) {
+                if (c == null) return const SizedBox.shrink();
+                return PlayPauseIndicator(
+                  controller: c,
+                  userPaused: _userPaused,
+                );
+              },
+            ),
+          ),
         ],
       ),
     );

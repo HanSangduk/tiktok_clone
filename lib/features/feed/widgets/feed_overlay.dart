@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../models/video_post.dart';
-import '../feed_view_model.dart';
 import 'action_button.dart';
+import 'heart_action_button.dart';
 
 /// 영상 위 오버레이 (우측 액션 바 + 하단 username/caption).
-/// `likedSetViewModelProvider`를 직접 watch하므로 좋아요 변경 시
-/// 영상 layer는 rebuild되지 않고 본 위젯만 다시 그려짐.
+/// 좋아요 처리는 [HeartActionButton]에 위임 (Lottie 애니메이션 포함).
 class FeedOverlay extends ConsumerWidget {
   final VideoPost post;
 
@@ -15,11 +14,6 @@ class FeedOverlay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLiked = ref.watch(
-      likedSetViewModelProvider.select((s) => s.contains(post.id)),
-    );
-    void toggleLike() =>
-        ref.read(likedSetViewModelProvider.notifier).toggle(post.id);
     void noop() {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -42,23 +36,19 @@ class FeedOverlay extends ConsumerWidget {
                 children: [
                   _Avatar(username: post.username),
                   const SizedBox(height: 18),
-                  ActionButton(
-                    assetPath: 'assets/icons/heart.svg',
-                    label: _formatCount(post.likes + (isLiked ? 1 : 0)),
-                    onTap: toggleLike,
-                    color: isLiked
-                        ? const Color(0xFFFE2C55)
-                        : Colors.white,
+                  HeartActionButton(
+                    videoId: post.id,
+                    likesBase: post.likes,
                   ),
                   const SizedBox(height: 18),
                   ActionButton(
-                    assetPath: 'assets/icons/comment.svg',
+                    assetPath: 'assets/icons/ic_comment.svg',
                     label: _formatCount(post.comments),
                     onTap: noop,
                   ),
                   const SizedBox(height: 18),
                   ActionButton(
-                    assetPath: 'assets/icons/share.svg',
+                    assetPath: 'assets/icons/ic_share.svg',
                     label: _formatCount(post.shares),
                     onTap: noop,
                   ),
@@ -94,9 +84,7 @@ class FeedOverlay extends ConsumerWidget {
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
-                        shadows: [
-                          Shadow(blurRadius: 6, color: Colors.black87),
-                        ],
+                        shadows: [Shadow(blurRadius: 6, color: Colors.black87)],
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -106,9 +94,7 @@ class FeedOverlay extends ConsumerWidget {
                         color: Colors.white,
                         fontSize: 14,
                         height: 1.3,
-                        shadows: [
-                          Shadow(blurRadius: 6, color: Colors.black87),
-                        ],
+                        shadows: [Shadow(blurRadius: 6, color: Colors.black87)],
                       ),
                     ),
                   ],

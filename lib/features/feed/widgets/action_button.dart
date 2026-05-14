@@ -26,9 +26,8 @@ class ActionButton extends StatelessWidget {
         children: [
           SvgPicture.asset(
             assetPath,
-            width: 34,
-            height: 34,
-            colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+            width: 30,
+            height: 30,
           ),
           const SizedBox(height: 4),
           Text(

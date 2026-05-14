@@ -226,6 +226,7 @@ scripts/
 2. **오디오 중첩** (이전 controller pause 전에 다음 play)
 3. **메인 스레드 block** (`await initialize()` 직접 호출)
 4. **메모리 압박** (controller dispose 누락)
+5. 스크롤 버벅임 
 
 ### 7.2 시도한 해결 (실패한 접근)
 
@@ -233,6 +234,7 @@ scripts/
 2. **`VisibilityDetector`만으로 play/pause 제어** → visibility 이벤트가 스크롤 도중 발생 → 미정착 페이지가 play 트리거 → 중첩 + 깜빡임
 3. **Provider.family로 controller pool을 ViewModel로 끌어올림** → autoDispose 타이밍이 위젯 lifecycle보다 늦/빨라 race condition
 4. **검정 placeholder** → 빠른 스크롤 시 평가자에게 "끊김"으로 인지됨
+5. onPageChanged 제거 후 NotificationListener
 
 ### 7.3 최종 해결 — 4-pattern 조합
 

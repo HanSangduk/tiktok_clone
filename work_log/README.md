@@ -16,6 +16,7 @@
 | [P08](P08-readme-ai-docs.md) | README + AI_USAGE + ai-conversations 6건 발췌 | 완료 | docs | 2026-05-11 | 2026-05-12 |
 | [P09](P09-demo-video-perf-claim.md) | profile mode 영상 녹화 + ffmpeg 압축 + raw transcript 압축 + GitHub repo | 진행 중 | docs | 2026-05-12 | |
 | [P10](P10-scroll-jank-perf.md) | 스크롤 jank 진단 + 개선 (peek 메모리캐시 / setState 조건 / RepaintBoundary) | 완료 | video | 2026-05-12 | 2026-05-12 |
+| [P11](P11-lottie-play-pause-indicator.md) | Lottie 애니메이션 (더블탭 splash + 좋아요 4-hearts) + Pause indicator | 완료 | ui | 2026-05-13 | 2026-05-13 |
 
 ## 도메인 라벨 (이 프로젝트 enum)
 
